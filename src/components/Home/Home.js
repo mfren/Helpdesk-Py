@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function processData(snapshot) {
-    let newData = [[],[],[]];
+    let newData = [[],[],[]]
     if (snapshot !== null) {            // Catch a non-existent cache
         if (snapshot.val() !== null)    // Catch no data in database
         for (const [key, val] of Object.entries(snapshot.val())) {
@@ -65,13 +65,15 @@ function processData(snapshot) {
     return newData
 }
 
-function UserHomeBase(props) {
+function HomeBase(props) {
     const classes = useStyles();
+    
+    const isAdmin = props.adminMode;
     
     let [data, setData] = useState({
         values: props.cache.reports() !== null ? processData(props.cache.reports()) : [[],[],[]],
         loaded: props.cache.reports() !== null,
-    });
+    })
     
     useEffect(() => {
         // This effect subscribes to a listener on the Firebase Realtime Database
@@ -80,33 +82,41 @@ function UserHomeBase(props) {
         // This is then partially passed to the "ReportColumns" to render
         let mounted = true;
         
-        let reference = props.manager.db.ref("reports");
-        reference
-            .orderByChild("user/uid")
-            .equalTo(props.manager.auth.currentUser.uid)
-            .on('value', function(snapshot) {
-                props.cache.cacheReports(snapshot);
-                
-                if (mounted) {
-                    setData({
-                        values: processData(snapshot),
-                        loaded: true,
-                    });
-                }
-            });
+        let reference = props.manager.db.ref("reports")
+        let callback = snapshot => {
+            props.cache.cacheReports(snapshot)
 
+            if (mounted) {
+                setData({
+                    values: processData(snapshot),
+                    loaded: true,
+                });
+            }
+        }
+        
+        if (isAdmin === true) {
+            reference
+                .orderByChild("user/uid")
+                .on('value', callback);
+        } else {
+            reference
+                .orderByChild("user/uid")
+                .equalTo(props.manager.auth.currentUser.uid)
+                .on('value', callback);
+        }
+        
         return () => {
             mounted = false;
             reference.off()
         }
-    }, []);
+    }, [])
 
     return (
         <PageLimit maxWidth="lg">
             <Grid container direction="column" spacing={3} className={classes.mainGrid}>
                 <Grid container direction="row" justify="space-between" alignItems="center" className={classes.headerGrid}>
                     <Grid item>
-                        <Typography variant="h4">Welcome</Typography>
+                        <Typography variant="h4">Welcome {isAdmin ? "Admin" : "User"}</Typography>
                     </Grid>
                     <Grid item>
                         <AddReportButton/>
@@ -115,7 +125,7 @@ function UserHomeBase(props) {
                 <Grid container direction="row" className={classes.reportsContainer}>
                     <Grid item md={6} xs={12} className={classes.paperGridItem}>
                         <ReportColumn
-                            reports={[...new Set([...data.values[0], ...data.values[1]])]}
+                            reports={[...new Set([...data.values[1], ...data.values[0]])]}
                             loaded={data.loaded}
                             noItems="You have no Pending Reports"
                         />
@@ -133,21 +143,15 @@ function UserHomeBase(props) {
     )
 }
 
-function AdminHomeBase(props) {
-    return (
-        <PageLimit maxWidth="lg">
-            <h1>Hello Admin!</h1>
-        </PageLimit>
-    )
-}
-function HomeBase(props) {
+function HomeSwitcher(props) {
+    console.log(props.isAdmin)
     if (props.isAdmin === true) {
         return (
-            <AdminHomeBase {...props}/>
+            <HomeBase adminMode={true} {...props}/>
         )
     } else if (props.isAdmin === false) {
         return (
-            <UserHomeBase {...props}/>
+            <HomeBase adminMode={false} {...props}/>
         )
     } else {
         return (
@@ -156,4 +160,4 @@ function HomeBase(props) {
     }
 }
 
-export const Home = withAuth(CONDITIONS.withAnyUser)(withAppCache(withManager(withRouter(HomeBase))));
+export const Home = withAuth(CONDITIONS.withAnyUser)(withAppCache(withManager(withRouter(HomeSwitcher))));
