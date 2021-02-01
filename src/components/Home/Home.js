@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function processData(snapshot) {
-    let newData = [[],[],[]]
+    let newData = [[],[],[]];
     if (snapshot !== null) {            // Catch a non-existent cache
         if (snapshot.val() !== null)    // Catch no data in database
         for (const [key, val] of Object.entries(snapshot.val())) {
@@ -71,7 +71,7 @@ function UserHomeBase(props) {
     let [data, setData] = useState({
         values: props.cache.reports() !== null ? processData(props.cache.reports()) : [[],[],[]],
         loaded: props.cache.reports() !== null,
-    })
+    });
     
     useEffect(() => {
         // This effect subscribes to a listener on the Firebase Realtime Database
@@ -80,12 +80,12 @@ function UserHomeBase(props) {
         // This is then partially passed to the "ReportColumns" to render
         let mounted = true;
         
-        let reference = props.manager.db.ref("reports")
+        let reference = props.manager.db.ref("reports");
         reference
             .orderByChild("user/uid")
             .equalTo(props.manager.auth.currentUser.uid)
             .on('value', function(snapshot) {
-                props.cache.cacheReports(snapshot)
+                props.cache.cacheReports(snapshot);
                 
                 if (mounted) {
                     setData({
@@ -99,7 +99,7 @@ function UserHomeBase(props) {
             mounted = false;
             reference.off()
         }
-    }, [])
+    }, []);
 
     return (
         <PageLimit maxWidth="lg">
