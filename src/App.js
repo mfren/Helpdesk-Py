@@ -8,11 +8,13 @@ import SignUp from "./components/SignUp";
 import CreateReport from "./components/CreateReport";
 import ViewReport from "./components/ViewReport";
 import NoMatch from "./components/NoMatch";
-import Manager, {ManagerContext} from "./components/Manager";
 import * as ROUTES from "./constants/routes";
-import CacheContext from "./components/Cache/context";
 
-const useStyles = makeStyles((theme) => ({
+
+// These styles create the different sections for the Navigation Bar, the main content, and the Footer Bar.
+// This is done wil the CSS Flex-Box, where the top and bottom will stay static at particular sizes,
+// and the ContentContainer will grow depending on the size needed.
+const useStyles = makeStyles({
     mainContainer: {
         display: "flex",
         flexFlow: "column",
@@ -36,11 +38,17 @@ const useStyles = makeStyles((theme) => ({
     switch: {
         height: "100%"
     }
-}));
+});
 
 export default function App() {
     const classes = useStyles();
-    
+
+    // The Navigation and Footer are set outside of the Switch, as we want them to stay
+    // the same regardless of which page we are currently viewing.
+
+    // The Switch is provided by React Router and uses the URL to determine which page to display.
+    // It can also be used to send users to different pages without the need to reload.
+
     return (
         <div className={classes.mainContainer}>
             <div className={classes.headerContainer}>
@@ -67,7 +75,7 @@ export default function App() {
                 </Switch>
             </div>
             <div className={classes.footerContainer}>
-                
+                {/* TODO Write a Footer */}
             </div>
         </div>
     );
