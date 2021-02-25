@@ -1,16 +1,7 @@
 ﻿import React from "react";
 import clsx from 'clsx';
 import { withRouter } from 'react-router-dom';
-import {
-    Button,
-    makeStyles,
-    Paper, 
-    TextField, 
-    Tooltip, 
-    Grid,
-    Typography,
-    CircularProgress
-} from "@material-ui/core";
+import { Button, makeStyles, Paper, TextField, Tooltip, Grid, Typography, CircularProgress } from "@material-ui/core";
 import green from "@material-ui/core/colors/green";
 import PageLimit from "../Layouts/PageLimit";
 import FormSelector from "../FormSelector";
@@ -66,52 +57,32 @@ const CreateReportBase = props => {
     const [cat, setCat] = React.useState("");
     const [urg, setUrg] = React.useState("");
 
+    // These hold the state of the object when the form is sent to the server
+    // this allows me to control the Loading Wheel
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
     });
-    
-    // Form validation
-    let valid = true;
-    let tooltip = "";
-    
-    if (title === "") {
-        valid = false;
-        tooltip = "Please add: Title"
-    }
-    if (desc === ""){
-        valid = false;
-        
-        if (tooltip === ""){
-            tooltip = "Please add: Description"
-        }
-        else {
-            tooltip = tooltip + ", Description"
-        }
-    }
-    if (cat === ""){
-        valid = false;
 
-        if (tooltip === ""){
-            tooltip = "Please add: Category"
-        }
-        else {
-            tooltip = tooltip + ", Category"
-        }
-    }
-    if (urg === ""){
-        valid = false;
+    // Form Validation, this check that every field has been filled in
+    let valid, tooltip;
+    let missing = [];
+    if (title === "") { missing.push(" Title") }
+    if (desc === "") { missing.push(" Description") }
+    if (cat === "") { missing.push(" Category") }
+    if (urg === "") { missing.push(" Urgency") }
 
-        if (tooltip === ""){
-            tooltip = "Please add: Urgency"
-        }
-        else {
-            tooltip = tooltip + ", Urgency"
-        }
+    valid = missing === [];
+
+    if (valid) { tooltip = "" }
+    else {
+        // We then turn the missing items into a tooltip to be displayed
+        tooltip = "Please Add:" + missing.toString();
     }
-    
+
+    // These handlers take the data from the text fields and puts it in the state variables
     const handleChange = {
         title: event => {
             setTitle(event.target.value);
@@ -126,25 +97,41 @@ const CreateReportBase = props => {
             setUrg(event.target.value);
         }
     };
-    
+
+    // This function is called when the form is submitted, it formats the data and sends it to the server
     const submit = async function(event) {
+
+        // First we change the state of the object to indicate that we are waiting.
+        // This will trigger a redraw with the loading-wheel active
         if (!loading) {
             setSuccess(false);
             setLoading(true);
         }
-        
+
+        // We then call the function on the manager class to send the data to the server
+        // I've also added some 'then' and 'catch' functions at the end which will be called when
+        // the manager returns the promise.
         props.manager.request.postForm(title, desc, urg, cat)
             .then(function (id) {
+                // If the promise comes back successful, we will change the loading states
+                // which will trigger a redraw without the loading wheel, and then we want to
+                // push the user to the new report they've created.
                 setSuccess(true);
                 setLoading(false);
                 props.history.push(ROUTES.VIEW_REPORT + id)
             })
             .catch(function (error) {
-                console.error(error)
+                // If there's an error, we want to log that message (for debugging purposes)
+                // And then change the loading states to redraw the page.
+                // We can use the 'success' state to draw an error-indication on screen,
+                // such as a red-button or message
+                console.error(error);
                 setLoading(false);
             })
     };
-    
+
+    // Fields that use 'CONFIG_VALUES.<VALUE>' are pulling information out of the constants file for this page
+    // These values can be found at 'src/constants/reportValues.js'
     return (
         <PageLimit maxWidth="md">
             <Paper elevation={3} className={classes.formContainer}>
@@ -198,6 +185,11 @@ const CreateReportBase = props => {
                         </Grid>
                     </Grid>
                 </Grid>
+                {/*
+                    The following component holds the button to submit the form to the database
+                    It also holds the loading wheel,
+                    it will use the 'loading' state to determine certain parts of its behaviour
+                 */}
                 <div className={classes.buttonContainer}>
                     <Tooltip title={tooltip}>
                         <div className={classes.buttonWrapper}>
@@ -211,6 +203,9 @@ const CreateReportBase = props => {
             </Paper>
         </PageLimit>
     )
-}
+};
 
-export const CreateReport = withAuth(CONDITIONS.withAnyUser)(withManager(withRouter(CreateReportBase)))
+// This statement wraps the base component with several context before exposing it as an export.
+// The 'withAuth' takes a authorisation condition and a component, it will only show the component
+// if the auth condition is met. Read more about this at 'src/constants/authConditions.js'
+export const CreateReport = withAuth(CONDITIONS.withAnyUser)(withManager(withRouter(CreateReportBase)));
