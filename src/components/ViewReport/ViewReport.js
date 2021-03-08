@@ -106,9 +106,9 @@ const ViewReportBase = props => {
     useEffect(() => {
         // This effect subscribes to a listener on the Firebase Realtime Database
         // The reference gets all of the data from the correct report in the db
-        let mounted = true
+        let mounted = true;
         
-        let reference = props.manager.db.ref("reports")
+        let reference = props.manager.db.ref("reports");
         reference
             .orderByKey()
             .equalTo(id)
@@ -136,7 +136,7 @@ const ViewReportBase = props => {
             mounted = false;
             reference.off()
         }
-    }, [])
+    }, []);
     
     if (!data.loaded) {
         return (
@@ -194,7 +194,7 @@ const ViewReportBase = props => {
             <PageLimit maxWidth="md">
                 <Grid container direction="row" justify="space-between">
                     <Typography variant="h3" component="h1">{data.value.title}</Typography>
-                    {  /* Change chip based on whether user is admin TODO Change to conditional */
+                    {  /* Change chip based on whether user is admin */
                         isAdmin === true ? (
                             <div>
                                 <Chip

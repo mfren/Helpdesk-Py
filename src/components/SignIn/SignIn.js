@@ -90,12 +90,12 @@ function SignInBase(props) {
     // Changes the component state that holds the Password
     const handlePassChange = e => {
         setPass(e.target.value);
-    }
+    };
     
     const handleSubmit = event => {
         event.preventDefault();     // Prevents the event from pushing us to another page with URL params (default behaviour)
         
-        setLoading(true)
+        setLoading(true);
         
         // This signs in the user, and if successful, pushes the user to the home page
         // If not, it sets the error message in a local state, which is shown on the page
@@ -105,7 +105,7 @@ function SignInBase(props) {
                 let newErrors = {
                     username: "",
                     password: "",
-                }
+                };
                 
                 switch (error.code) {
                     case "auth/wrong-password":

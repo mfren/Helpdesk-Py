@@ -114,4 +114,4 @@ const ReportPreviewBase = props => {
     )
 }
 
-export const ReportPreview = withManager(withRouter(ReportPreviewBase))
+export const ReportPreview = withManager(withRouter(ReportPreviewBase));

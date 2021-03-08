@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import {
     Grid,
     Typography,
-    makeStyles,
+    makeStyles, Chip,
 } from "@material-ui/core";
 import PageLimit from "../Layouts/PageLimit";
 import ReportColumn from "./ReportColumn";
@@ -12,6 +12,7 @@ import {withManager} from "../Manager";
 import {withAppCache} from "../Cache";
 import * as CONDITIONS from '../../constants/authConditions';
 import AddReportButton from "./AddReportButton";
+import ConfirmationDialogRaw from "../ViewReport/ConfirmationDialog";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function processData(snapshot) {
-    let newData = [[],[],[]]
+    let newData = [[],[],[]];
     if (snapshot !== null) {            // Catch a non-existent cache
         if (snapshot.val() !== null)    // Catch no data in database
         for (const [key, val] of Object.entries(snapshot.val())) {
@@ -73,7 +74,7 @@ function HomeBase(props) {
     let [data, setData] = useState({
         values: props.cache.reports() !== null ? processData(props.cache.reports()) : [[],[],[]],
         loaded: props.cache.reports() !== null,
-    })
+    });
     
     useEffect(() => {
         // This effect subscribes to a listener on the Firebase Realtime Database
@@ -82,9 +83,9 @@ function HomeBase(props) {
         // This is then partially passed to the "ReportColumns" to render
         let mounted = true;
         
-        let reference = props.manager.db.ref("reports")
+        let reference = props.manager.db.ref("reports");
         let callback = snapshot => {
-            props.cache.cacheReports(snapshot)
+            props.cache.cacheReports(snapshot);
 
             if (mounted) {
                 setData({
@@ -92,7 +93,7 @@ function HomeBase(props) {
                     loaded: true,
                 });
             }
-        }
+        };
         
         if (isAdmin === true) {
             reference
@@ -109,7 +110,7 @@ function HomeBase(props) {
             mounted = false;
             reference.off()
         }
-    }, [])
+    }, []);
 
     return (
         <PageLimit maxWidth="lg">
@@ -119,7 +120,7 @@ function HomeBase(props) {
                         <Typography variant="h4">Welcome {isAdmin ? "Admin" : "User"}</Typography>
                     </Grid>
                     <Grid item>
-                        <AddReportButton/>
+                        { props.adminMode === true ? ( <div/> ) : ( <AddReportButton/> ) }
                     </Grid>
                 </Grid>
                 <Grid container direction="row" className={classes.reportsContainer}>
@@ -143,8 +144,9 @@ function HomeBase(props) {
     )
 }
 
+// TODO Simplify
 function HomeSwitcher(props) {
-    console.log(props.isAdmin)
+    console.log(props.isAdmin);
     if (props.isAdmin === true) {
         return (
             <HomeBase adminMode={true} {...props}/>

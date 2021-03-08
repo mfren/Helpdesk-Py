@@ -1,15 +1,6 @@
 ﻿import React from 'react';
 import { withRouter } from "react-router-dom";
-import {
-    AppBar,
-    Toolbar,
-    Typography,
-    MenuItem,
-    Menu,
-    IconButton,
-    makeStyles
-} from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu';
+import { AppBar, Toolbar, Typography, MenuItem, Menu, IconButton, makeStyles } from '@material-ui/core'
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withManager } from "../Manager";
 

@@ -1,18 +1,19 @@
 ﻿import React from 'react';
 import { withRouter } from "react-router-dom";
-import { 
-    Typography, 
-    Container, 
-    Link, 
-    Grid, 
-    Box, 
-    Checkbox, 
-    FormControlLabel, 
-    TextField, 
-    CssBaseline, 
-    Avatar, 
-    Button, 
-    makeStyles 
+import {
+    Typography,
+    Container,
+    Link,
+    Grid,
+    Box,
+    Checkbox,
+    FormControlLabel,
+    TextField,
+    CssBaseline,
+    Avatar,
+    Button,
+    makeStyles,
+    Tooltip
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import withManager from "../Manager/withManager";
@@ -60,9 +61,22 @@ const SignUpBase = (props) => {
     const handleAdminChange = event => setAdmin(event.target.checked);
     
     // Make sure that the inputs are valid
-    
-    
-    
+    let valid, tooltip;
+    let missing = [];
+    if (fname === "") { missing.push(" First Name") }
+    if (lname === "") { missing.push(" Last Name") }
+    if (user === "" || user.indexOf('@') === -1) { missing.push(" Email") }
+    if (pass === "") { missing.push(" Password") }
+
+    valid = missing.length === 0;
+
+    if (valid) { tooltip = "" }
+    else {
+        // We then turn the missing items into a tooltip to be displayed
+        tooltip = "Please Add:" + missing.toString();
+    }
+
+
     const handleSubmit = event => {
         // This prevents the default event from happening
         event.preventDefault();
@@ -156,15 +170,20 @@ const SignUpBase = (props) => {
                             />
                         </Grid>
                     </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign Up
-                    </Button>
+                    <Tooltip title={tooltip}>
+                        <div>
+                            <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            disabled={!valid}
+                            className={classes.submit}
+                        >
+                            Sign Up
+                        </Button>
+                        </div>
+                    </Tooltip>
                     <Grid container justify="flex-end">
                         <Grid item>
                             <Link href={ROUTES.SIGN_IN} variant="body2" onClick={ event => { event.preventDefault(); props.history.push(ROUTES.SIGN_IN) } }>

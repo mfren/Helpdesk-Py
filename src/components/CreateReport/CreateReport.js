@@ -74,7 +74,7 @@ const CreateReportBase = props => {
     if (cat === "") { missing.push(" Category") }
     if (urg === "") { missing.push(" Urgency") }
 
-    valid = missing === [];
+    valid = missing.length === 0;
 
     if (valid) { tooltip = "" }
     else {

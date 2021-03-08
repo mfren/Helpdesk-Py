@@ -68,14 +68,17 @@ class Manager {
 
     currentUser = () => { return {
         email: this.auth.currentUser.email,
-        uid: this.auth.currentUser.uid
-    }}
+        uid: this.auth.currentUser.uid,
+        roles: {
+            admin: this.auth.currentUser.uid
+        }
+    }};
 
     refs = {
         reports: () => {
-            let ref = this.db.ref("reports")
-            ref.orderByChild("user/uid").equalTo(this.auth.currentUser.uid)
-            return ref
+            let ref = this.db.ref("reports");
+            ref.orderByChild("user/uid").equalTo(this.auth.currentUser.uid);
+            return ref;
         }
     }
 
@@ -92,7 +95,7 @@ class Manager {
                 day: d.getDay(),
                 hour: d.getHours(),
                 minute: d.getMinutes(),
-            }
+            };
 
             let key = this.db.ref().child('reports').push().key;
 
@@ -111,11 +114,11 @@ class Manager {
                     }
                 },
                 datetime: currentDatetime,
-            }
+            };
             
             await this.db.ref('reports/' + key).set(data);
 
-            return key
+            return key;
         }.bind(this),
 
         getForms: async function() {
@@ -129,7 +132,7 @@ class Manager {
                 .once("value")
                 .then(function (snapshot) {
                     data = snapshot.val()
-                })
+                });
             return data;
         }.bind(this),
 
@@ -139,7 +142,7 @@ class Manager {
             let ref = this.db.ref("reports/" + id);
             await ref.once("value").then(function (snapshot) {
                 data = snapshot.val()
-            })
+            });
             return data;
         }.bind(this),
 
@@ -148,7 +151,7 @@ class Manager {
         }.bind(this),
 
         addComment: async function(id, comment) {
-            let data = await this.request.getForm(id)
+            let data = await this.request.getForm(id);
 
             let d = new Date();
             let currentDatetime = {
@@ -157,14 +160,14 @@ class Manager {
                 day: d.getDay(),
                 hour: d.getHours(),
                 minute: d.getMinutes(),
-            }
+            };
 
-            let newComments = data.comments
+            let newComments = data.comments;
             newComments.push({
                 comment: comment,
                 datetime: currentDatetime,
                 user: this.currentUser(),
-            })
+            });
 
             await this.db.ref("reports/" + id + "/comments").set(newComments);
         }.bind(this),
