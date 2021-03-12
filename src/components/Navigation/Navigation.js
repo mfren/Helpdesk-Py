@@ -1,8 +1,9 @@
 ﻿import React from 'react';
 import { withRouter } from "react-router-dom";
-import { AppBar, Toolbar, Typography, MenuItem, Menu, IconButton, makeStyles } from '@material-ui/core'
+import { AppBar, Toolbar, Typography, MenuItem, Menu, IconButton, makeStyles, Button } from '@material-ui/core'
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withManager } from "../Manager";
+import * as ROUTES from '../../constants/routes';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +40,7 @@ function NavigationBase(props) {
                     <Typography variant="h6" className={classes.title}>
                         Matt's Helpdesk
                     </Typography>
+                    <Button color="inherit" onClick={() => props.history.push(ROUTES.HOME)}>Home</Button>
                     {auth && (
                         <div>
                             <IconButton
