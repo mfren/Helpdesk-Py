@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '22px',
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
+        boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
         '& .MuiChip-label': {
             color: 'white',
             fontWeight: 'bold',
@@ -48,19 +49,19 @@ const useStyles = makeStyles((theme) => ({
     status2: {
         backgroundColor: COLORS.green["400"],
         '&:hover, &:focus': {
-            backgroundColor: COLORS.green["400"],
+            backgroundColor: COLORS.green["600"],
         },
     },
     status1: {
         backgroundColor: COLORS.orange["400"],
         '&:hover, &:focus': {
-            backgroundColor: COLORS.orange["400"],
+            backgroundColor: COLORS.orange["600"],
         },
     },
     status0: {
         backgroundColor: COLORS.red["400"],
         '&:hover, &:focus': {
-            backgroundColor: COLORS.red["400"],
+            backgroundColor: COLORS.red["600"],
         },
     },
     topDivider: {
@@ -201,6 +202,7 @@ const ViewReportBase = props => {
                                     label={chipLabel}
                                     icon={chipIcon}
                                     onClick={handleChipClick}
+                                    elevation={5}
                                     className={`${classes.chip} ${colorClass}`}
                                 />
                                 <ConfirmationDialogRaw
