@@ -40,9 +40,9 @@ function NavigationBase(props) {
                     <Typography variant="h6" className={classes.title}>
                         Matt's Helpdesk
                     </Typography>
-                    <Button color="inherit" onClick={() => props.history.push(ROUTES.HOME)}>Home</Button>
                     {auth && (
                         <div>
+                            <Button color="inherit" onClick={() => props.history.push(ROUTES.HOME)}>Home</Button>
                             <IconButton
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"
