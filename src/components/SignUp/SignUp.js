@@ -145,6 +145,7 @@ const SignUpBase = (props) => {
                                 id="email"
                                 label="Email Address"
                                 name="email"
+                                inputProps={{autoCapitalize: 'none'}}
                                 autoComplete="email"
                             />
                         </Grid>
@@ -158,6 +159,7 @@ const SignUpBase = (props) => {
                                 label="Password"
                                 type="password"
                                 id="password"
+                                inputProps={{autoCapitalize: 'none'}}
                                 autoComplete="current-password"
                             />
                         </Grid>

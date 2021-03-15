@@ -159,6 +159,7 @@ function SignInBase(props) {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        inputProps={{autoCapitalize: 'none'}}
                         error={errors.username !== ""}
                         helperText={errors.username}
                     />
@@ -172,6 +173,7 @@ function SignInBase(props) {
                         label="Password"
                         type="password"
                         id="password"
+                        inputProps={{autoCapitalize: 'none'}}
                         autoComplete="current-password"
                         error={errors.password !== ""}
                         helperText={errors.password}
