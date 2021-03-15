@@ -5,13 +5,13 @@ import firebase from "firebase";
 // file in the root of the project, i.e. in the same folder with the Dockerfile and package.json
 // The values in the .env file need to spelt identically to the keys here (REACT_APP_API_KEY_USER etc)
 const userConfig = {
-    apiKey: process.env.REACT_APP_API_KEY_USER,
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN_USER,
-    databaseURL: process.env.REACT_APP_DATABASE_URL_USER,
-    projectId: process.env.REACT_APP_PROJECT_ID_USER,
-    storageBucket: process.env.REACT_APP_STORAGE_BUCKET_USER,
-    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID_USER,
-    appId: process.env.REACT_APP_APP_ID_USER,
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_DATABASE_URL,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID,
 };
 
 // The Manager class holds some of the most important logic for the functioning of the application.
