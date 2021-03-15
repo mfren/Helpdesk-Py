@@ -21,13 +21,6 @@ import Comment from "./Comment";
 import AddComment from "./AddComment";
 
 const useStyles = makeStyles((theme) => ({
-    formContainer: {
-        height: "min-content",
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(4),
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(3),
-    },
     dotContainer: {
         height: "100%",
     },
