@@ -6,8 +6,14 @@ const useStyles = makeStyles((theme) => ({
         display: "inline-block"
     },
     commentContainer: {
-        marginLeft: theme.spacing(5),
-        marginRight: theme.spacing(5),
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
+        },
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: theme.spacing(5),
+            marginRight: theme.spacing(5),
+        },
     },
     verticalDivider: {
         height: "24px",
