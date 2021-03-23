@@ -90,10 +90,10 @@ const ViewReportBase = props => {
     let { id } = useParams();
     const uid = props.manager.auth.currentUser.uid;
     const isAdmin = props.adminMode;
-    
+
     const [data, setData] = React.useState({
-        value: null,
-        loaded: false,
+        value: props.cache.reports() !== null ? props.cache.getReport(id) : null,
+        loaded: props.cache.reports() !== null,
     });
     const [open, setOpen] = React.useState(false);
     
@@ -262,4 +262,4 @@ function ViewReportSwitcher(props) {
     }
 }
 
-export const ViewReport = withAuth(CONDITIONS.withAnyUser)(withManager(ViewReportSwitcher));
+export const ViewReport = withAuth(CONDITIONS.withAnyUser)(withManager(withAppCache(ViewReportSwitcher)));
